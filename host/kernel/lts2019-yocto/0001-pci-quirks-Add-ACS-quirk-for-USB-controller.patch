@@ -1,0 +1,41 @@
+From 94c4c0b84cf2975e8941a24496ea2a525e69993e Mon Sep 17 00:00:00 2001
+From: Saranya Gopal <saranya.gopal@intel.com>
+Date: Mon, 20 Jul 2020 14:34:11 +0530
+Subject: [PATCH] pci: quirks: Add ACS quirk for USB controller
+
+Override ACS for Elkhartlake USB host and device
+controllers.
+
+Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
+---
+ drivers/pci/quirks.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index a1ec8a1977d3..54a997ce5981 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -4709,6 +4709,11 @@ static int pci_quirk_brcm_acs(struct pci_dev *dev, u16 acs_flags)
+ 		PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR | PCI_ACS_UF);
+ }
+ 
++static int pci_quirk_usb(struct pci_dev *dev, u16 acs_flags)
++{
++	return 1;
++}
++
+ static const struct pci_dev_acs_enabled {
+ 	u16 vendor;
+ 	u16 device;
+@@ -4812,6 +4817,8 @@ static const struct pci_dev_acs_enabled {
+ 	{ PCI_VENDOR_ID_ZHAOXIN, 0x9083, pci_quirk_mf_endpoint_acs },
+ 	/* Zhaoxin Root/Downstream Ports */
+ 	{ PCI_VENDOR_ID_ZHAOXIN, PCI_ANY_ID, pci_quirk_zhaoxin_pcie_ports_acs },
++	{ PCI_VENDOR_ID_INTEL, 0x4b7d, pci_quirk_usb },
++	{ PCI_VENDOR_ID_INTEL, 0x4b7e, pci_quirk_usb },
+ 	{ 0 }
+ };
+ 
+-- 
+2.21.0
+
